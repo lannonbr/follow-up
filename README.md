@@ -1,12 +1,13 @@
-# Welcome to your CDK JavaScript project
+# Follow Up
 
-This is a blank project for CDK development with JavaScript.
+A project to keep track of links and pages that interest me.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app. The build step is not required when using JavaScript.
+This includes a:
 
-## Useful commands
+- CDK project for provisioning AWS resources
+- [Script Kit](https://github.com/johnlindquist/kit) function for actually saving the links
 
-* `npm run test`         perform the jest unit tests
-* `cdk deploy`           deploy this stack to your default AWS account/region
-* `cdk diff`             compare deployed stack with current state
-* `cdk synth`            emits the synthesized CloudFormation template
+Currently I have only implemented the functionality of saving but in the future I am interested in ideas like:
+
+- a weekly email of all of the previous week's links
+- an email that fetches a random link from the past

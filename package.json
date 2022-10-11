@@ -1,20 +1,19 @@
 {
   "name": "follow-up",
+  "private": true,
   "version": "0.1.0",
   "bin": {
     "follow-up": "bin/follow-up.js"
   },
   "scripts": {
-    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
-    "cdk": "cdk",
-    "test": "jest"
+    "cdk": "cdk"
   },
   "devDependencies": {
-    "aws-cdk": "2.45.0",
-    "jest": "^27.5.1"
+    "aws-cdk": "2.45.0"
   },
   "dependencies": {
     "aws-cdk-lib": "2.45.0",
     "constructs": "^10.0.0"
-  }
+  },
+  "license": "MIT"
 }
