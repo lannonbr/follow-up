@@ -4,3 +4,5 @@ node_modules
 .cdk.staging
 cdk.out
 .env
+www/_site
+.DS_Store

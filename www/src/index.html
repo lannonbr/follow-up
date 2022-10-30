@@ -1,0 +1,24 @@
+---
+layout: main-layout.html
+---
+
+<p>The following is a listing of the past 7 days of links that I've saved:</p>
+
+{% for link in links %}
+<article class="border border-black my-4 p-4 rounded-lg">
+  <div class="flex justify-between mb-4">
+    <h2 class="inline text-xl">{{ link.name }}</h2>
+    <p>
+      Saved: <time datetime="{{link.timestampISO}}">{{ link.timestamp }}</time>
+    </p>
+  </div>
+  <p class="mb-4">Comments: {{ link.comments }}</p>
+  <p>
+    <a
+      href="{{link.url}}"
+      class="bg-blue-600 text-white text-lg py-2 px-8 inline-block rounded-lg hover:shadow-lg hover:bg-blue-500"
+      >Visit Link</a
+    >
+  </p>
+</article>
+{% endfor %}
