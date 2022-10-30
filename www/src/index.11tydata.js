@@ -41,7 +41,7 @@ module.exports = {
         };
       });
 
-      return Items;
+      return Items.reverse();
     },
   },
 };
