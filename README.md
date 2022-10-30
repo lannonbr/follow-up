@@ -6,8 +6,11 @@ This includes a:
 
 - CDK project for provisioning AWS resources
 - [Script Kit](https://github.com/johnlindquist/kit) function for actually saving the links
+- [Eleventy](https://www.11ty.dev/) website to publicly display links.
 
-Currently I have only implemented the functionality of saving but in the future I am interested in ideas like:
+## Future Ideas
+
+In the future I am interested in ideas like:
 
 - a weekly email of all of the previous week's links
 - an email that fetches a random link from the past
