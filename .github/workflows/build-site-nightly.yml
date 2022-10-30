@@ -1,0 +1,40 @@
+on:
+  schedule:
+    - cron: "0 0 * * *" # Every day at 12:00AM UTC
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "www/**"
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: www
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: FollowUpSiteSession
+          role-duration-seconds: 900
+      - run: npm install
+      - run: npm run build
+        env:
+          DYNAMO_TABLE_NAME: ${{ secrets.DYNAMO_TABLE_NAME }}
+      - name: Deploy Site
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npm run build
+          wget https://github.com/lannonbr/netlify_deploy/releases/download/netlify_deploy-v0.3.0/netlify-deploy-linux-0.3.0.tar.gz
+          tar -xvf netlify-deploy-linux-0.3.0.tar.gz
+          ./release/netlify_deploy --path _site --prod
