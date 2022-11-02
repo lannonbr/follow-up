@@ -10,38 +10,58 @@ const ddbClient = new DynamoDBClient({
 });
 const docClient = DynamoDBDocumentClient.from(ddbClient);
 
+async function fetchItems(yearMonth, timestamp) {
+  const result = await docClient.send(
+    new QueryCommand({
+      TableName: process.env.DYNAMO_TABLE_NAME,
+      KeyConditionExpression: "year_month = :ym and #t > :t",
+      ExpressionAttributeNames: {
+        "#n": "name",
+        "#t": "timestamp",
+        "#u": "url",
+      },
+      ExpressionAttributeValues: {
+        ":ym": yearMonth,
+        ":t": timestamp,
+      },
+      ProjectionExpression: "#n, #t, #u, comments",
+    })
+  );
+
+  return result.Items;
+}
+
 module.exports = {
   eleventyComputed: {
     links: async () => {
-      const lastSevenDays = dayjs().subtract(1, "week");
-      const result = await docClient.send(
-        new QueryCommand({
-          TableName: process.env.DYNAMO_TABLE_NAME,
-          KeyConditionExpression: "year_month = :ym and #t > :t",
-          ExpressionAttributeNames: {
-            "#n": "name",
-            "#t": "timestamp",
-            "#u": "url",
-          },
-          ExpressionAttributeValues: {
-            ":ym": "2022-10",
-            ":t": lastSevenDays.unix().toString(),
-          },
-          ProjectionExpression: "#n, #t, #u, comments",
-        })
-      );
+      const sevenDaysAgo = dayjs().subtract(1, "week");
 
-      let { Items } = result;
+      let items = [];
 
-      Items = Items.map((item) => {
-        return {
-          ...item,
-          timestamp: dayjs.unix(item.timestamp).format("MM/DD/YYYY"),
-          timestampISO: dayjs.unix(item.timestamp).toISOString(),
-        };
-      });
+      // If 7 days ago was a different month, fetch the following month's partition as well
+      if (sevenDaysAgo.month() !== dayjs().month()) {
+        const yearMonth = sevenDaysAgo.add(1, "month").format("YYYY-MM");
+        const timestamp = sevenDaysAgo.unix().toString();
+        const newItems = await fetchItems(yearMonth, timestamp);
 
-      return Items.reverse();
+        items.push(...newItems);
+      }
+
+      const yearMonth = sevenDaysAgo.format("YYYY-MM");
+      const timestamp = sevenDaysAgo.unix().toString();
+      const newItems = await fetchItems(yearMonth, timestamp);
+
+      items.push(...newItems);
+
+      return items
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .map((item) => {
+          return {
+            ...item,
+            timestamp: dayjs.unix(item.timestamp).format("MM/DD/YYYY"),
+            timestampISO: dayjs.unix(item.timestamp).toISOString(),
+          };
+        });
     },
   },
 };
