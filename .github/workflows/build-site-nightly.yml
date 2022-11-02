@@ -10,7 +10,7 @@ on:
 permissions:
   id-token: write
   contents: write
-
+name: Build Site Nightly
 jobs:
   run:
     runs-on: ubuntu-latest
