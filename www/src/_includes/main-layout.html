@@ -9,8 +9,18 @@
   </head>
   <body>
     <div class="max-w-5xl mx-auto my-4 px-4">
-      <header class="mb-8">
-        <h1 class="text-4xl font-bold tracking-wide">Follow Up</h1>
+      <header
+        class="mb-8 flex flex-col md:flex-row items-center md:justify-between"
+      >
+        <h1 class="mb-4 md:mb-0 text-4xl font-bold tracking-wide">
+          <a href="/"> Follow Up </a>
+        </h1>
+        <nav>
+          <ul class="flex gap-x-4">
+            <li><a href="/" class="hover:underline">Home</a></li>
+            <li><a href="/archive/" class="hover:underline">Archive</a></li>
+          </ul>
+        </nav>
       </header>
       {{content}}
       <footer>

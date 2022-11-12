@@ -1,0 +1,16 @@
+---
+layout: main-layout.html
+permalink: /archive/
+---
+
+<p>The following is a listing of all previous months links</p>
+
+<ul class="space-y-2 my-2">
+  {% for a in archive %}
+  <li class="list-disc ml-8">
+    <a href="/archive/{{a.key}}/" class="text-blue-600 hover:underline"
+      >{{a.key}}</a
+    >
+  </li>
+  {% endfor %}
+</ul>
